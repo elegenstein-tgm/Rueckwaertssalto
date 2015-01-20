@@ -130,7 +130,7 @@ public class MetadataCollector {
 			for(int i=1;rs.next();i++){
 //					System.out.println(rs.getString("COLUMN_NAME"));
 					tmp.add(rs.getString("COLUMN_NAME"));
-					fieldPFK.put(rs.getString("COLUMN_NAME"), new String[]{"PK"});
+					fieldPFK.put(rs.getString("COLUMN_NAME"), new String[]{"PK",null});
 			}
 			return tmp;
 		} catch (SQLException e) {
