@@ -104,7 +104,7 @@ public class MetadataCollector {
 			e.printStackTrace();
 		}
 	}
-	public ArrayList<String> getForeign(String tablename){
+	public ArrayList<String> getForeign(String tablename){ 
 		try {
 			ResultSet rs;
 			rs=dbmd.getImportedKeys(null, null, tablename);
@@ -113,7 +113,7 @@ public class MetadataCollector {
 //			rs.next();
 			while (rs.next()) {
 				tmp.add(rs.getString("FKCOLUMN_NAME"));
-				fieldPFK.put(rs.getString("FKCOLUMN_NAME"), new String[]{"FK",rs.getString("FKTABLE_NAME")});
+				fieldPFK.put(rs.getString("FKCOLUMN_NAME"), new String[]{"FK",rs.getString("PKTABLE_NAME"),rs.getString("PKCOLUMN_NAME")});
 			}
 			return tmp;
 		} catch (SQLException e) {
@@ -122,7 +122,7 @@ public class MetadataCollector {
 		}
 		return null;
 	}
-	public ArrayList<String> getPrimary(String tablename){
+	public ArrayList<String> getPrimary(String tablename){ 
 		try {
 			ResultSet rs;
 			rs=dbmd.getPrimaryKeys(null	, null, tablename);
@@ -153,7 +153,12 @@ public class MetadataCollector {
 		Iterator<String> i = a.iterator();
 		while (i.hasNext()) {
 			String key =i.next();
-			System.out.println(""+key+" : "+mdc.fieldPFK.get(key));
+			System.out.print(""+key+" : "+mdc.fieldPFK.get(key)[0]);
+			if( mdc.fieldPFK.get(key)[1]!=null){
+				System.out.println("->"  +mdc.fieldPFK.get(key)[1]+"."+mdc.fieldPFK.get(key)[2]);
+			}else{
+				System.out.println();
+			}
 			
 		}
 		mdc.destory();
