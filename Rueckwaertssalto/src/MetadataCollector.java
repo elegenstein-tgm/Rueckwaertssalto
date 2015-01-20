@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 //import com.mysql.jdbc.*;
 
@@ -108,12 +111,10 @@ public class MetadataCollector {
 			rs=dbmd.getImportedKeys(null, null, tablename);
 //			rs = dbmd.getPrimaryKeys(null, null, tablename);
 			ArrayList<String> tmp = new ArrayList<>();
-			for(int i=1;rs.next();i++){
 //			rs.next();
-//				for(int i = 1; i<=1;i++ ){
-//					System.out.println(rs.getString("FKCOLUMN_NAME"));
-					tmp.add(rs.getString("FKCOLUMN_NAME"));
-//				}
+			while (rs.next()) {
+				tmp.add(rs.getString("FKCOLUMN_NAME"));
+				fieldPFK.put(rs.getString("FKCOLUMN_NAME"), "FK");
 			}
 			return tmp;
 		} catch (SQLException e) {
@@ -130,6 +131,7 @@ public class MetadataCollector {
 			for(int i=1;rs.next();i++){
 //					System.out.println(rs.getString("COLUMN_NAME"));
 					tmp.add(rs.getString("COLUMN_NAME"));
+					fieldPFK.put(rs.getString("COLUMN_NAME"), "PK");
 			}
 			return tmp;
 		} catch (SQLException e) {
@@ -148,6 +150,13 @@ public class MetadataCollector {
 		mdc.getColumnNames("comment");
 		System.out.println("-------------");
 		mdc.getPrimary("comment");
+		Set<String> a= mdc.fieldPFK.keySet();
+		Iterator<String> i = a.iterator();
+		while (i.hasNext()) {
+			String key =i.next();
+			System.out.println(""+key+" : "+mdc.fieldPFK.get(key));
+			
+		}
 		mdc.destory();
 	}
 
