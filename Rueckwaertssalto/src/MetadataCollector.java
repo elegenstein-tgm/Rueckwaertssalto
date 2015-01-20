@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import com.mysql.jdbc.*;
+//import com.mysql.jdbc.*;
 
 /**
  * @author Erik
@@ -68,7 +68,7 @@ public class MetadataCollector {
 				try {
 					if(rs != null){
 						while (rs.next()) {
-							System.out.println(rs.getString(3));
+//							System.out.println(rs.getString(3));
 							tablenames.add(rs.getString(3));
 						}
 					}
@@ -79,19 +79,20 @@ public class MetadataCollector {
 		}
 		return null;
 	}
-	public void getColumnNames(String tablename){
+	public ArrayList<String> getColumnNames(String tablename){
 		try {
 			ResultSet rs = dbmd.getColumns(null, null, tablename, null);
 //			rs.next();
+			ArrayList<String> b=new ArrayList<>() ;
 			while(rs.next()){
-				for(int i = 0; i< foreign(tablename).length; i++)
-					if()
+				b.add(rs.getString(4));
 			}
+			return b;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		return null;
 	}
 	public void destory(){
 		try {
@@ -101,7 +102,7 @@ public class MetadataCollector {
 			e.printStackTrace();
 		}
 	}
-	public String[] foreign(String tablename){
+	public ArrayList<String> getForeign(String tablename){
 		try {
 			ResultSet rs;
 			rs=dbmd.getImportedKeys(null, null, tablename);
@@ -110,10 +111,27 @@ public class MetadataCollector {
 			for(int i=1;rs.next();i++){
 //			rs.next();
 //				for(int i = 1; i<=1;i++ ){
+//					System.out.println(rs.getString("FKCOLUMN_NAME"));
 					tmp.add(rs.getString("FKCOLUMN_NAME"));
 //				}
 			}
-			return (String[])tmp.toArray();
+			return tmp;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<String> getPrimary(String tablename){
+		try {
+			ResultSet rs;
+			rs=dbmd.getPrimaryKeys(null	, null, tablename);
+			ArrayList<String> tmp = new ArrayList<>();
+			for(int i=1;rs.next();i++){
+//					System.out.println(rs.getString("COLUMN_NAME"));
+					tmp.add(rs.getString("COLUMN_NAME"));
+			}
+			return tmp;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -125,9 +143,11 @@ public class MetadataCollector {
 		mdc.createConnection("192.168.222.132","root","root","timetool");
 		mdc.getTabNames();
 		System.out.println("-------------");
-		mdc.foreign("comment");
+		mdc.getForeign("comment");
 		System.out.println("-------------");
 		mdc.getColumnNames("comment");
+		System.out.println("-------------");
+		mdc.getPrimary("comment");
 		mdc.destory();
 	}
 
