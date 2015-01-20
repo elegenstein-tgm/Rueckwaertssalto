@@ -4,6 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import com.mysql.jdbc.*;
 
@@ -16,8 +18,8 @@ public class MetadataCollector {
 	private String host = null, uname = null, pwd = null, dbname = null;
 	private DatabaseMetaData dbmd = null;
 	private Connection conn = null;
-	private ArrayList<String> tablenames= new ArrayList<>();
-
+	public ArrayList<String> tablenames= new ArrayList<>();
+	public HashMap<String, String> fieldPFK = new HashMap<>();
 	public void createConnection(String host, String username, String password,
 			String databasename) {
 		this.host = host;
@@ -77,6 +79,20 @@ public class MetadataCollector {
 		}
 		return null;
 	}
+	public void getColumnNames(String tablename){
+		try {
+			ResultSet rs = dbmd.getColumns(null, null, tablename, null);
+//			rs.next();
+			while(rs.next()){
+				for(int i = 0; i< foreign(tablename).length; i++)
+					if()
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	public void destory(){
 		try {
 			conn.close();
@@ -85,20 +101,24 @@ public class MetadataCollector {
 			e.printStackTrace();
 		}
 	}
-	public void foreign(String tablename){
+	public String[] foreign(String tablename){
 		try {
 			ResultSet rs;
-			rs = dbmd.getPrimaryKeys(null, null, tablename);
-			while(rs.next()){
+			rs=dbmd.getImportedKeys(null, null, tablename);
+//			rs = dbmd.getPrimaryKeys(null, null, tablename);
+			ArrayList<String> tmp = new ArrayList<>();
+			for(int i=1;rs.next();i++){
 //			rs.next();
-//				for(int i = 1; i<=5;i++ ){
-					System.out.println(rs.getString(4));
-				}
-//			}
+//				for(int i = 1; i<=1;i++ ){
+					tmp.add(rs.getString("FKCOLUMN_NAME"));
+//				}
+			}
+			return (String[])tmp.toArray();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 	public static void main(String[] args) {
 		MetadataCollector mdc = new MetadataCollector();
@@ -106,6 +126,8 @@ public class MetadataCollector {
 		mdc.getTabNames();
 		System.out.println("-------------");
 		mdc.foreign("comment");
+		System.out.println("-------------");
+		mdc.getColumnNames("comment");
 		mdc.destory();
 	}
 
