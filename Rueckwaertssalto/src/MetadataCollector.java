@@ -22,7 +22,8 @@ public class MetadataCollector {
 	private DatabaseMetaData dbmd = null;
 	private Connection conn = null;
 	public ArrayList<String> tablenames= new ArrayList<>();
-	public HashMap<String, String> fieldPFK = new HashMap<>();
+	public HashMap<String, String[]> fieldPFK = new HashMap<>();
+	
 	public void createConnection(String host, String username, String password,
 			String databasename) {
 		this.host = host;
@@ -31,7 +32,6 @@ public class MetadataCollector {
 		this.dbname = databasename;
 		createConnection();
 	}
-
 	public void createConnection() {
 		try {
 			Class.forName(JDBC);
@@ -49,7 +49,6 @@ public class MetadataCollector {
 			e.printStackTrace();
 		}
 	}
-
 	public String[] getTabNames(){
 		if(conn == null){
 			System.err.println("Got no Connection");
@@ -114,7 +113,7 @@ public class MetadataCollector {
 //			rs.next();
 			while (rs.next()) {
 				tmp.add(rs.getString("FKCOLUMN_NAME"));
-				fieldPFK.put(rs.getString("FKCOLUMN_NAME"), "FK");
+				fieldPFK.put(rs.getString("FKCOLUMN_NAME"), new String[]{"FK",rs.getString("FKTABLE_NAME")});
 			}
 			return tmp;
 		} catch (SQLException e) {
@@ -131,7 +130,7 @@ public class MetadataCollector {
 			for(int i=1;rs.next();i++){
 //					System.out.println(rs.getString("COLUMN_NAME"));
 					tmp.add(rs.getString("COLUMN_NAME"));
-					fieldPFK.put(rs.getString("COLUMN_NAME"), "PK");
+					fieldPFK.put(rs.getString("COLUMN_NAME"), new String[]{"PK"});
 			}
 			return tmp;
 		} catch (SQLException e) {
