@@ -16,6 +16,7 @@ public class MetadataCollector {
 	private String host = null, uname = null, pwd = null, dbname = null;
 	private DatabaseMetaData dbmd = null;
 	private Connection conn = null;
+	private ArrayList<String> tablenames= new ArrayList<>();
 
 	public void createConnection(String host, String username, String password,
 			String databasename) {
@@ -66,6 +67,7 @@ public class MetadataCollector {
 					if(rs != null){
 						while (rs.next()) {
 							System.out.println(rs.getString(3));
+							tablenames.add(rs.getString(3));
 						}
 					}
 				} catch (SQLException e) {
@@ -75,4 +77,36 @@ public class MetadataCollector {
 		}
 		return null;
 	}
+	public void destory(){
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void foreign(String tablename){
+		try {
+			ResultSet rs;
+			rs = dbmd.getPrimaryKeys(null, null, tablename);
+			while(rs.next()){
+//			rs.next();
+//				for(int i = 1; i<=5;i++ ){
+					System.out.println(rs.getString(4));
+				}
+//			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void main(String[] args) {
+		MetadataCollector mdc = new MetadataCollector();
+		mdc.createConnection("192.168.222.132","root","root","timetool");
+		mdc.getTabNames();
+		System.out.println("-------------");
+		mdc.foreign("comment");
+		mdc.destory();
+	}
+
 }
