@@ -139,6 +139,16 @@ public class MetadataCollector {
 		}
 		return null;
 	}
+	public void genRMcolumns(String tablename){
+		ArrayList<String> allc = getColumnNames(tablename), allp = getPrimary(tablename); ArrayList<String> allf = getForeign(tablename);
+		for(int i = 0; i< allc.size(); i++){
+			fieldPFK.put(allc.get(i), null);
+		}
+		for(int i = 0; i< allp.size(); i++){
+			fieldPFK.put(allp.get(i), new String[]{"PK"});
+		}
+	}
+	
 	public static void main(String[] args) {
 		MetadataCollector mdc = new MetadataCollector();
 		mdc.createConnection("192.168.222.132","root","root","timetool");
@@ -158,8 +168,7 @@ public class MetadataCollector {
 				System.out.println("->"  +mdc.fieldPFK.get(key)[1]+"."+mdc.fieldPFK.get(key)[2]);
 			}else{
 				System.out.println();
-			}
-			
+			}			
 		}
 		mdc.destory();
 	}
