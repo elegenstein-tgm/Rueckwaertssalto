@@ -49,7 +49,7 @@ public class MetadataCollector {
 			e.printStackTrace();
 		}
 	}
-	public String[] getTabNames(){
+	public ArrayList<String> getTabNames(){
 		if(conn == null){
 			System.err.println("Got no Connection");
 		}else{
@@ -79,7 +79,7 @@ public class MetadataCollector {
 				}
 			}
 		}
-		return null;
+		return tablenames;
 	}
 	public ArrayList<String> getColumnNames(String tablename){
 		try {
