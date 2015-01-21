@@ -1,3 +1,4 @@
+package ebraendli;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -17,10 +18,15 @@ public class Collecting {
 	public String autogenRM(String host, String dbname, String user, String pwd){
 		mdc.createConnection(host, user, user, dbname);
 		ArrayList<String> tbn = mdc.getTabNames();
-		for(int i = 0; i < tbn.size(); i++){
-			mdc.genRMcolumns(tbn.get(i));
-			hfw.addTableHTML(tbn.get(i), mdc.fieldPFK);
+		if(tbn==null){
+			System.err.println("Cant get tablenames");
+			System.exit(1);
 		}
+			
+//		for(int i = 0; i < tbn.size(); i++){
+			mdc.genRMcolumns(tbn.get(1));
+			hfw.addTableHTML(tbn.get(1), mdc.fieldPFK);
+	//	}
 		return hfw.genHTML();
 	}
 	

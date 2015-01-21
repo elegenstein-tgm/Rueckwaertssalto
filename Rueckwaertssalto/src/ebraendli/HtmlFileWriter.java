@@ -1,3 +1,4 @@
+package ebraendli;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -22,10 +23,17 @@ public class HtmlFileWriter {
 		Iterator<String> i = columns.keySet().iterator();
 		while(i.hasNext()){
 			String tmp = i.next();
-			if(columns.get(tmp)[0].equals("PK")){
+			if(columns.get(tmp)[0].contains("PK")){
 				writeS+="<td><u>"+tmp+"</u></td>";
 			}else{
-				writeS+="<td><i>"+columns.get(tmp)[1]+"."+columns.get(tmp)[2]+":"+tmp+"</i></td>";
+//				System.out.println(columns.get(tmp)[0].contains("FK"));
+				if(columns.get(tmp)[0].equals("FK")){
+					writeS+="<td><i>"+tmp+": "+columns.get(tmp)[1]+"."+columns.get(tmp)[2]+"</i></td>";
+//					System.out.println(columns.get(tmp)[0]+columns.get(tmp)[1]+columns.get(tmp)[2]);
+//					System.err.println(writeS);
+				}else{
+					writeS+="<td>"+tmp+"</td>";
+				}
 			}
 		}
 		writeS+="</tr></table><br />";
@@ -34,9 +42,10 @@ public class HtmlFileWriter {
 	public String genHTML(){
 
 		File file = new File("rm.html");
-		if(file.exists()==false)
+		
 			try {
-				file.createNewFile();
+				if(file.exists()==false)
+					file.createNewFile();
 				FileWriter fw = new FileWriter(file.getAbsoluteFile());
 				BufferedWriter bw = new BufferedWriter(fw);
 				//Modify the String to HTML syntax

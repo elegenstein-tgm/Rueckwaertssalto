@@ -1,3 +1,4 @@
+package ebraendli;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -73,13 +74,14 @@ public class MetadataCollector {
 //							System.out.println(rs.getString(3));
 							tablenames.add(rs.getString(3));
 						}
+						return tablenames;
 					}
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		return tablenames;
+		return null;
 	}
 	public ArrayList<String> getColumnNames(String tablename){
 		try {
@@ -114,6 +116,7 @@ public class MetadataCollector {
 			while (rs.next()) {
 				tmp.add(rs.getString("FKCOLUMN_NAME"));
 				fieldPFK.put(rs.getString("FKCOLUMN_NAME"), new String[]{"FK",rs.getString("PKTABLE_NAME"),rs.getString("PKCOLUMN_NAME")});
+//				System.err.println(rs.getString("PKTABLE_NAME")+"."+rs.getString("PKCOLUMN_NAME"));
 			}
 			return tmp;
 		} catch (SQLException e) {
@@ -140,19 +143,23 @@ public class MetadataCollector {
 		return null;
 	}
 	public void genRMcolumns(String tablename){
-		ArrayList<String> allc = getColumnNames(tablename), allp = getPrimary(tablename); ArrayList<String> allf = getForeign(tablename);
+		ArrayList<String> allc = getColumnNames(tablename), allp = getPrimary(tablename); 
 		for(int i = 0; i< allc.size(); i++){
-			fieldPFK.put(allc.get(i), null);
+			fieldPFK.put(allc.get(i), new String[]{""});
 		}
-		for(int i = 0; i< allp.size(); i++){
-			fieldPFK.put(allp.get(i), new String[]{"PK"});
-		}
+		getPrimary(tablename);
+		getForeign(tablename);
 	}
 	
 	public static void main(String[] args) {
 		MetadataCollector mdc = new MetadataCollector();
 		mdc.createConnection("192.168.222.132","root","root","timetool");
 		mdc.getTabNames();
+		
+		
+		
+		
+		
 		System.out.println("-------------");
 		mdc.getForeign("comment");
 		System.out.println("-------------");
