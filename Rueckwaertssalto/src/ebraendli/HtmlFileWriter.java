@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 
 /**
@@ -42,7 +41,6 @@ public class HtmlFileWriter {
 	public String genHTML(){
 
 		File file = new File("rm.html");
-		
 			try {
 				if(file.exists()==false)
 					file.createNewFile();

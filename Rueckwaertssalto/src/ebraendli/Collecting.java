@@ -15,6 +15,7 @@ public class Collecting {
 	
 	private MetadataCollector mdc = new MetadataCollector();
 	private HtmlFileWriter hfw = new HtmlFileWriter();
+	
 	public String autogenRM(String host, String dbname, String user, String pwd){
 		mdc.createConnection(host, user, user, dbname);
 		ArrayList<String> tbn = mdc.getTabNames();
@@ -22,13 +23,10 @@ public class Collecting {
 			System.err.println("Cant get tablenames");
 			System.exit(1);
 		}
-			
-//		for(int i = 0; i < tbn.size(); i++){
-			mdc.genRMcolumns(tbn.get(1));
-			hfw.addTableHTML(tbn.get(1), mdc.fieldPFK);
-	//	}
+		for(int i =0; i < tbn.size(); i++){
+			mdc.genRMcolumns(tbn.get(i));
+			hfw.addTableHTML(tbn.get(i), mdc.fieldPFK);
+		}
 		return hfw.genHTML();
 	}
-	
-	
 }
