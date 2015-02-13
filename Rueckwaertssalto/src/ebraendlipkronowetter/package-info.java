@@ -5,4 +5,4 @@
  * @author Erik
  *
  */
-package ebraendli;
+package ebraendlipkronowetter;

@@ -1,4 +1,4 @@
-package ebraendli;
+package ebraendlipkronowetter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -151,33 +151,4 @@ public class MetadataCollector {
 		getForeign(tablename);
 	}
 	
-	public static void main(String[] args) {
-		MetadataCollector mdc = new MetadataCollector();
-		mdc.createConnection("192.168.222.132","root","root","timetool");
-		mdc.getTabNames();
-		
-		
-		
-		
-		
-		System.out.println("-------------");
-		mdc.getForeign("comment");
-		System.out.println("-------------");
-		mdc.getColumnNames("comment");
-		System.out.println("-------------");
-		mdc.getPrimary("comment");
-		Set<String> a= mdc.fieldPFK.keySet();
-		Iterator<String> i = a.iterator();
-		while (i.hasNext()) {
-			String key =i.next();
-			System.out.print(""+key+" : "+mdc.fieldPFK.get(key)[0]);
-			if( mdc.fieldPFK.get(key)[1]!=null){
-				System.out.println("->"  +mdc.fieldPFK.get(key)[1]+"."+mdc.fieldPFK.get(key)[2]);
-			}else{
-				System.out.println();
-			}			
-		}
-		mdc.destory();
-	}
-
 }
