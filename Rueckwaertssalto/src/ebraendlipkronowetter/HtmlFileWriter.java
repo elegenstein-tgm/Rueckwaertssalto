@@ -40,7 +40,7 @@ public class HtmlFileWriter {
 	}
 	public String genHTML(){
 
-		File file = new File("rm.html");
+		File file = new File("generated-stuff/rm.html");
 			try {
 				if(file.exists()==false)
 					file.createNewFile();

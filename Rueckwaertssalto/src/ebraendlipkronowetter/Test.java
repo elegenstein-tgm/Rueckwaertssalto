@@ -3,11 +3,15 @@ package ebraendlipkronowetter;
 public class Test {
 
 	public static void main(String[] args) {
-		decide(args);
+//		decide(args);
+		testERD();
 	}
 	public static void printHelp(){
 		System.out.println("usage -h Host -u username -p password -d database -rm -erd");
 		System.out.println("erd not implemented");
+	}
+	public static void testERD(){
+		new erdGenerator().genINI();
 	}
 	public static void decide(String[] args){
 		Collecting a = new Collecting();
